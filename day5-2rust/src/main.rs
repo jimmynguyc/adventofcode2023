@@ -92,7 +92,15 @@ humidity-to-location map:
         category_maps.insert(conversion, cat_almanac);
     }
 
-    let pb = ProgressBar::new(1975502102);
+    let mut total_seeds: u64 = 0;
+    for seed_range in seed_ranges.iter() {
+        let values: Vec<usize> = seed_range.split_whitespace().map(|s| s.parse().unwrap()).collect();
+        let length = values[1] as u64;
+
+        total_seeds += length;
+    }
+
+    let pb = ProgressBar::new(total_seeds);
     let mut min = usize::MAX;
     let mut count = 0;
 
