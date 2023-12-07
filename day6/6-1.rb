@@ -18,32 +18,40 @@ race_params = [
 
 # Formula
 # =======
-# Given Winning Distance WD, Total Time TT.
-# Find range of Pressed Time PT, where PT ∈ Z (is an integer), and PT < TT.
+# Given Winning Distance WD, Total Time TT. Find range of Pressed Time PT, where
+# - Distance Travelled D > WD
+# - PT ∈ Z (is an integer)
+# - PT < TT.
 #
 # Speed S = PT
 # Remaining Time = RT
-# Distance travelled D = S * RT = S * (TT - PT) = PT * (TT * PT)
+#
+# D = S * RT
+#   = S * (TT - PT)
+#   = PT * (TT - PT)
 #
 # Since D > WD,
-# => PT * (TT * PT) > WD
+#   => PT * (TT - PT) > WD
 #
-# Therefore, solve PT
-# (1) PT > 1/2 * (TT - sqrt(TT**2 - 4*WD))
-# (2) PT < 1/2 * (sqrt(TT**2 - 4*WD) + TT)
+# Solve for PT - https://www.wolframalpha.com/input?i=Solve+for+x%2C+where+x+*+%28y+-+x%29+%3E+z
+#   => 1/2 * (TT - sqrt(TT**2 - 4*WD)) < PT < 1/2 * (sqrt(TT**2 - 4*WD) + TT)
+#
+# Find all integer PTs that satisfy
+#   (1) PT > 1/2 * (TT - sqrt(TT**2 - 4*WD))
+#   (2) PT < 1/2 * (sqrt(TT**2 - 4*WD) + TT)
 #
 def winning_strategies(race)
   total_time = race[:total_time]
   winning_distance = race[:distance]
 
   range_start = (0.5 * (total_time - Math.sqrt(total_time**2 - (4 * winning_distance)))).ceil
-  range_start += 1 if range_start % 1 == 0 # range start is a round number
+  range_start += 1 if range_start % 1 == 0 # range_start > PT, otherwise range_start == PT
 
   range_end = (0.5 * (Math.sqrt(total_time**2 - (4 * winning_distance)) + total_time)).ceil
 
   range_end = [range_end, total_time].min
 
-  puts "time: #{total_time}, range: #{range_start}...#{range_end}"
+  puts "time: #{total_time}, range: #{range_start}..#{range_end}"
   (range_start..range_end).count
 end
 
