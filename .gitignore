@@ -1,1 +1,6 @@
 input
+
+Cargo.lock
+release/
+debug/
+target/
